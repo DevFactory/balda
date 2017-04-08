@@ -21,10 +21,10 @@
 </head>
 <body ng-app="baldaApp">
 
-<h1>Balda Game</h1>
+<h1>Игра в Балду</h1>
 <div ng-controller="GameController as game">
     <p>
-        <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">New Game</button>
+        <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">Новая Игра</button>
     </p>
     <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}">
         <rect ng-repeat-start="tile in game.tiles"
@@ -38,6 +38,9 @@
             {{ tile.text }}
         </text>
     </svg>
+    <p>
+        Слово означает: {{ game.description }}
+    </p>
 </div>
 
 

@@ -30,8 +30,9 @@
                     this.loadNewGame = function () {
                         $http.get('/new-game')
                             .then(function (response) {
-                                self.tiles = response.data.map(self.view);
+                                self.tiles = response.data.tiles.map(self.view);
                                 self.width = self.square * (Math.sqrt(self.tiles.length) + 1);
+                                self.description = response.data.description;
                             });
                     };
 

@@ -5,4 +5,6 @@ package balda.game;
  */
 public interface Vocabulary {
     String findRandomWord();
+
+    String getDescription(String word);
 }

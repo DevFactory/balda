@@ -83,4 +83,9 @@ public class OzhegovVocabulary implements Vocabulary {
         }
         return "NOTFOUND";
     }
+
+    @Override
+    public String getDescription(String word) {
+        return vocabulary.get(word.toLowerCase());
+    }
 }

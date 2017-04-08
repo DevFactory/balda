@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Balda</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
+    <script src="app/app.module.js"></script>
+    <script src="app/game.controller.js"></script>
 </head>
-<body>
-Ну и Балда ты!
+<body ng-app="baldaApp">
+
+<h1>Balda Game</h1>
+<div ng-controller="GameController as game">
+    <p>
+        <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">New Game</button>
+    </p>
+    <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}">
+        <rect ng-repeat-start="tile in game.tiles"
+              ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
+              ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
+              style="fill-opacity: 0" stroke="grey" stroke-width="3">
+        </rect>
+        <text ng-repeat-end=""
+              ng-attr-x="{{ tile.textX }}" ng-attr-y="{{ tile.textY }}"
+              font-size="26">
+            {{ tile.text }}
+        </text>
+    </svg>
+</div>
+
+
 </body>
 </html>

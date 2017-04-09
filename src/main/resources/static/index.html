@@ -18,6 +18,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
     <script src="app/app.module.js"></script>
     <script src="app/game.controller.js"></script>
+    <style>
+
+    </style>
 </head>
 <body ng-app="baldaApp">
 
@@ -26,17 +29,24 @@
     <p>
         <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">Новая Игра</button>
     </p>
+    <p>
+        Вы выбрали слово: {{ game.move.word }}
+    </p>
     <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}">
-        <rect ng-repeat-start="tile in game.tiles"
-              ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
-              ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
-              style="fill-opacity: 0" stroke="grey" stroke-width="3">
-        </rect>
-        <text ng-repeat-end=""
+        <text ng-repeat-start="tile in game.tiles"
               ng-attr-x="{{ tile.textX }}" ng-attr-y="{{ tile.textY }}"
               font-size="26">
             {{ tile.text }}
         </text>
+        <rect ng-repeat-end=""
+              ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
+              ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
+              ng-attr-style="fill-opacity: {{ tile.selected ? 0.3 : 0}}"
+              stroke="grey"
+              stroke-width="3"
+              ng-click="game.tileClicked(tile)"
+        >
+        </rect>
     </svg>
     <p>
         Слово означает: {{ game.description }}

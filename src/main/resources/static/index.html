@@ -15,7 +15,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+    <!-- using non-minified for learning of the internals -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <script src="app/websocket-test.js"></script>
     <script src="app/app.module.js"></script>
     <script src="app/game.controller.js"></script>
     <style>
@@ -25,34 +29,76 @@
 <body ng-app="baldaApp">
 
 <h1>Игра в Балду</h1>
-<div ng-controller="GameController as game">
-    <p>
-        <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">Новая Игра</button>
-    </p>
-    <p>
-        Вы выбрали слово: {{ game.move.word }}
-    </p>
-    <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}">
-        <text ng-repeat-start="tile in game.tiles"
-              ng-attr-x="{{ tile.textX }}" ng-attr-y="{{ tile.textY }}"
-              font-size="26">
-            {{ tile.text }}
-        </text>
-        <rect ng-repeat-end=""
-              ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
-              ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
-              ng-attr-style="fill-opacity: {{ tile.selected ? 0.3 : 0}}"
-              stroke="grey"
-              stroke-width="3"
-              ng-click="game.tileClicked(tile)"
-        >
-        </rect>
-    </svg>
-    <p>
-        Слово означает: {{ game.description }}
-    </p>
+<div ng-controller="GameController as game" class="container">
+    <div class="row">
+        <p>
+            <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">Новая Игра</button>
+        </p>
+        <p>
+            Вы выбрали слово: {{ game.move.word }}
+        </p>
+        <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}">
+            <text ng-repeat-start="tile in game.tiles"
+                  ng-attr-x="{{ tile.textX }}" ng-attr-y="{{ tile.textY }}"
+                  font-size="26">
+                {{ tile.text }}
+            </text>
+            <rect ng-repeat-end=""
+                  ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
+                  ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
+                  ng-attr-style="fill-opacity: {{ tile.selected ? 0.3 : 0}}"
+                  stroke="grey"
+                  stroke-width="3"
+                  ng-click="game.tileClicked(tile)"
+            >
+            </rect>
+        </svg>
+        <p>
+            Слово означает: {{ game.description }}
+        </p>
+    </div>
 </div>
-
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">Chat connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                    <input type="text" id="message" class="form-control" placeholder="Your message here...">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Chat messages</th>
+                </tr>
+                </thead>
+                <tbody id="chat-messages">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </form>
+</div>
 
 </body>
 </html>

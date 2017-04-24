@@ -10,6 +10,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/custom.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -19,49 +20,77 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-    <script src="app/websocket-test.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.js"></script>-->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-sanitize.js"></script>
     <script src="app/app.module.js"></script>
-    <script src="app/game.controller.js"></script>
-    <style>
+    <script src="app/websocket-test.js"></script>
+    <script src="app/game/char-selector.controller.js"></script>
+    <script src="app/game/game.controller.js"></script>
 
-    </style>
 </head>
 <body ng-app="baldaApp">
 
-<h1>Игра в Балду</h1>
 <div ng-controller="GameController as game" class="container">
     <div class="row">
-        <p>
-            <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">Новая Игра</button>
-        </p>
-        <p>
-            Вы выбрали слово: {{ game.move.word }}
-        </p>
-        <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}">
-            <text ng-repeat-start="tile in game.tiles"
-                  ng-attr-x="{{ tile.textX }}" ng-attr-y="{{ tile.textY }}"
-                  font-size="26">
-                {{ tile.text }}
-            </text>
-            <rect ng-repeat-end=""
-                  ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
-                  ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
-                  ng-attr-style="fill-opacity: {{ tile.selected ? 0.3 : 0}}"
-                  stroke="grey"
-                  stroke-width="3"
-                  ng-click="game.tileClicked(tile)"
-            >
-            </rect>
-        </svg>
-        <p>
-            Слово означает: {{ game.description }}
-        </p>
+        <div class="col-md-12">
+            <h1>Игра в Балду</h1>
+            <p>
+                <button type="button" class="btn btn-lg btn-default" ng-click="game.loadNewGame()">Новая Игра</button>
+            </p>
+            <p>
+                Вы выбрали слово: {{ game.move.word }}
+            </p>
+            <svg ng-attr-width="{{ game.width }}" ng-attr-height="{{ game.width }}" class="center-block">
+                <text ng-repeat-start="tile in game.tiles"
+                      ng-attr-x="{{ tile.textX }}" ng-attr-y="{{ tile.textY }}"
+                      font-size="26">
+                    {{ tile.text }}
+                </text>
+                <rect ng-repeat-end=""
+                      ng-attr-height="{{ tile.height }}" ng-attr-width="{{ tile.width }}"
+                      ng-attr-x="{{ tile.x }}" ng-attr-y="{{ tile.y }}"
+                      ng-attr-style="fill-opacity: {{ tile.selected ? 0.3 : 0}}"
+                      stroke="grey"
+                      stroke-width="3"
+                      ng-click="game.tileClicked(tile)"
+                >
+                </rect>
+            </svg>
+            <p>
+                Слово означает: {{ game.description }}
+            </p>
+        </div>
     </div>
-</div>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
-<div id="main-content" class="container">
+
+    <div class="modal-demo">
+        <script type="text/ng-template" id="selectCharTemplate.html">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Выберите буковку</h3>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div ng-repeat="char in game.chars" class="col-xs-2">
+                    <a href="#" style="font-size: 35px; text-decoration: none"
+                       ng-click="$event.preventDefault(); game.ok(char)">{{ char }}</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" ng-click="game.cancel()">Cancel</button>
+            </div>
+        </script>
+
+        <div ng-show="game.selected">Selection from a modal: {{ game.selected }}</div>
+
+    </div>
+    <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript
+        being
+        enabled. Please enable
+        Javascript and reload this page!</h2></noscript>
     <div class="row">
         <div class="col-md-4">
             <form class="form-inline">

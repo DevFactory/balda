@@ -1,7 +1,10 @@
-(function() {
+(function () {
     'use strict';
 
     angular
-        .module('baldaApp', []);
+        .module('baldaApp', [
+            'ngAnimate',
+            'ngSanitize',
+            'ui.bootstrap']);
 
 })();
